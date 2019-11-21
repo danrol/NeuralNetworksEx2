@@ -65,7 +65,7 @@ def back_propogation(a1, a2, z0, z1, z2, y, w2):
     Delta1 = tf.matmul(z0.T, delta1)
     return delta2, Delta1, Delta2
 
-def xorNeuralNetwork(data, excpected_data, k, bridge, learning_rate):
+def xor_neural_network(data, excpected_data, k,  learning_rate):
     amount_input_neurons = 2
     amount_output_neurons = 1
 
@@ -73,11 +73,11 @@ def xorNeuralNetwork(data, excpected_data, k, bridge, learning_rate):
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
     y = tf.compat.v1.placeholder(tf.float32, [None, amount_output_neurons])
 
-    w1 = tf.Variable(tf.random_uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
+    w1 = tf.Variable(tf.random.uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
                                        dtype=tf.dtypes.float32, name=None)
-    w2 = tf.Variable(tf.random_uniform([k, 1], minval=-1, maxval=1, seed=0),dtype=tf.dtypes.float32,  name=None)
-    b1 = tf.compat.v1.Variable(tf.random_uniform([1, k], minval=-1, maxval=1, seed=0), dtype=tf.dtypes.float32, name=None)
-    b2 = tf.compat.v1.Variable(tf.random_uniform([1, 1], minval=-1, maxval=1, seed=0), dtype=tf.dtypes.float32, name=None)
+    w2 = tf.Variable(tf.random.uniform([k, 1], minval=-1, maxval=1, seed=0),dtype=tf.dtypes.float32,  name=None)
+    b1 = tf.compat.v1.Variable(tf.random.uniform([1, k], minval=-1, maxval=1, seed=0), dtype=tf.dtypes.float32, name=None)
+    b2 = tf.compat.v1.Variable(tf.random.uniform([1, 1], minval=-1, maxval=1, seed=0), dtype=tf.dtypes.float32, name=None)
 
     sess = tf.compat.v1.Session()
     init = tf.compat.v1.global_variables_initializer()
@@ -92,4 +92,4 @@ if __name__ == '__main__':
     expected_input_results = np.array([[0], [1], [1], [0]])
     data_validation = np.array([[1, 0.1], [1, 0.9], [0.9, 0.9], [0.1, 0.9]])
     expected_data_validation_results = np.array([[1], [0], [0], [1]])
-
+    xor_neural_network(input_data_x, expected_input_results, 4, 0.09)
