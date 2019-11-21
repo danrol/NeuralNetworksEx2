@@ -13,9 +13,36 @@ max_num_of_epocs = 40000
 temperature = 0.001
 
 
-def gradientDescent():
+def gradientDescent(x, y, k, w1, w2, b1, b2):
+    lr = 0.09
+    m = 4
+    costs = []
     for i in range(max_num_of_epocs):
-        pass
+        #forward propagation
+        a1, z1, a2, z2 = forward_propagation(x, k, w1, w2, b1, b2)
+
+        #backward propagation
+        delta2, Delta1, Delta2 = back_propogation(a1, a2, x, z1, z2, y)
+
+        w1 -= lr*(1/m)*Delta1
+        w2 -= lr*(1/m)*Delta2
+
+        c = np.mean(np.abs(delta2))
+        costs.append(c)
+
+        if i % 1000 ==0:
+            print(f"Iteration: {i} Error: {c}")
+
+    print("Training complete.")
+    z3 = forward_propagation(x, y, k, w1, w2, b1, b2)
+
+    plt.plot(costs)
+    plt.show()
+
+
+
+def sigmoid_derivative(x):
+    return tf.sigmoid(x)*(1-tf.sigmoid(x))
 
 def forward_propagation(x, k, w1, w2, b1, b2, ):
     a1 = tf.matmul(x, w1) + b1
@@ -30,6 +57,13 @@ def forward_propagation(x, k, w1, w2, b1, b2, ):
     z2 = tf.sigmoid(a2 / temperature)
 
     return a1, z1, a2, z2
+
+def back_propogation(a1, a2, z0, z1, z2, y, w2):
+    delta2 = z2 - y
+    Delta2 = tf.matmul(tf.transpose(z1), delta2)
+    delta1 = (tf.transpose(tf.tensordot(w2[1:,:])))*sigmoid_derivative(a1)
+    Delta1 = tf.matmul(z0.T, delta1)
+    return delta2, Delta1, Delta2
 
 def xorNeuralNetwork(data, excpected_data, k, bridge, learning_rate):
     amount_input_neurons = 2
@@ -49,13 +83,13 @@ def xorNeuralNetwork(data, excpected_data, k, bridge, learning_rate):
     init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
 
-    squared = tf.square(final_output - y)
-    mse_loss = tf.reduce_sum(squared)
+    #squared = tf.square(final_output - y)
+    #mse_loss = tf.reduce_sum(squared)
 
 if __name__ == '__main__':
-    input_data_x = [[0, 0], [0, 1], [1, 0], [1, 1]]
+    input_data_x = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
     # expected results from activating XOR (corresponds to the lists in input_train list)
-    expected_input_results = [[0], [1], [1], [0]]
-    data_validation = [[1, 0.1], [1, 0.9], [0.9, 0.9], [0.1, 0.9]]
-    expected_data_validation_results = [[1], [0], [0], [1]]
+    expected_input_results = np.array([[0], [1], [1], [0]])
+    data_validation = np.array([[1, 0.1], [1, 0.9], [0.9, 0.9], [0.1, 0.9]])
+    expected_data_validation_results = np.array([[1], [0], [0], [1]])
 
