@@ -1,3 +1,8 @@
+#EX2 XOR using Gradient Descent and Cross Entropy loss
+#1 1 --> 0
+#1 0 --> 1
+#0 1 --> 1
+#0 0 --> 0
 #Daniil Rolnik
 #334018009
 #k - amount of hidden neurons in hidden layer
@@ -5,12 +10,30 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 max_num_of_epocs = 40000
+temperature = 0.001
 
-def gradientDescentXor(data, excpected_data, k, bridge, learning_rate):
+
+def gradientDescent():
+    for i in range(max_num_of_epocs):
+        pass
+
+def forward_propagation(x, k, w1, w2, b1, b2, ):
+    a1 = tf.matmul(x, w1) + b1
+    z1 = tf.sigmoid(a1 / temperature)
+
+    if k == 1:
+        conc_hidden_layer_res = tf.concat([z1, x], 1)
+    else:
+        conc_hidden_layer_res = z1
+
+    a2 = tf.matmul(conc_hidden_layer_res, w2) + b2
+    z2 = tf.sigmoid(a2 / temperature)
+
+    return a1, z1, a2, z2
+
+def xorNeuralNetwork(data, excpected_data, k, bridge, learning_rate):
     amount_input_neurons = 2
     amount_output_neurons = 1
-    temperature = 0.001
-
 
     # define placeholder that will be used later after tensorflow session starts
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
@@ -23,19 +46,8 @@ def gradientDescentXor(data, excpected_data, k, bridge, learning_rate):
     b2 = tf.compat.v1.Variable(tf.random_uniform([1, 1], minval=-1, maxval=1, seed=0), dtype=tf.dtypes.float32, name=None)
 
     sess = tf.compat.v1.Session()
-    sess.run(tf.compat.v1.global_variables_initializer())
-
-    z1 = tf.matmul(x, w1) + b1
-    hidden_layer_res = tf.sigmoid(z1 / temperature)
-
-    if k == 1:
-        conc_hidden_layer_res = tf.concat([hidden_layer_res, x], 1)
-    else:
-        conc_hidden_layer_res = hidden_layer_res
-
-    z2 = tf.matmul(conc_hidden_layer_res, w2) + b2
-
-    final_output = tf.sigmoid(z2 / temperature)
+    init = tf.compat.v1.global_variables_initializer()
+    sess.run(init)
 
     squared = tf.square(final_output - y)
     mse_loss = tf.reduce_sum(squared)
