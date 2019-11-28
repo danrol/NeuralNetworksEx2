@@ -12,10 +12,11 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 
-max_num_of_epocs = 40000
+max_num_of_steps = 40000
 num_succ_runs = 10
 temperature = 0.001
 learning_rate = 0.01
+min_val_loss = 0.3
 huge_num = 1000000
 min_change = 0.01
 
@@ -30,6 +31,23 @@ def get_output(x, w1, w2, bridge, b1, b2):
     z2 = tf.matmul(conc_hidden_layer_res, w2) + b2
 
     output = tf.sigmoid(z2 / temperature)
+    return output
+
+def perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res):
+    success = False
+    count = 0
+    num_of_succ = 0
+    last_loss = huge_num
+    for steps in range(max_num_of_steps):
+        sess.run(train_grad, {x: train_data, y: expected_train_res})
+        val_loss = sess.run(loss, {x: val_data, y: exp_val_res})
+        if abs(last_loss - val_loss) < min_change:
+            num_of_succ = num_of_succ + 1
+            if val_loss < min_val_loss and count >= num_succ_runs:
+                success = True
+                break
+            else:
+                count = 0
 
 def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge,  learn_rate):
     amount_input_neurons = 2
@@ -50,19 +68,12 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
     sess = tf.compat.v1.Session()
     init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
-
+    output = get_output(x, w1, w2, bridge, b1, b2)
     loss = - tf.reduce_sum((y * tf.log(output)) + (1 - y) * tf.log(1.0 - output))
     train_grad = tf.train.GradientDescentOptimizer(learn_rate).minimize(loss)
 
-    last_loss = huge_num
-    success = False
-    num_of_succ = 0
-    for epoch in range(max_num_of_epocs):
-        sess.run(train_grad, {x: train_data, y: expected_train_res})
-        val_loss = sess.run(loss, {x: val_data, y: exp_val_res})
-        if abs(last_loss-val_loss) < min_change:
-            num_of_succ = num_of_succ + 1
-            if val_los < min
+    perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res);
+
     final_output = []
     #loss = []
     #result = sess.run([final_output, loss], {x: data, y: expected_data})
