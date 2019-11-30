@@ -35,10 +35,15 @@ def get_output(x, w1, w2, bridge, b1, b2):
     output = tf.sigmoid(z2 / temperature)
     return output
 
+
+#perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res);
+
 def perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res):
     success, count, num_of_succ, last_loss = (False, 0, 0, huge_num)
     for steps in range(max_num_of_steps):
+        print("here 00")
         sess.run(train_grad, {x: train_data, y: expected_train_res})
+        print("here 01")
         val_loss = sess.run(loss, {x: val_data, y: exp_val_res})
         if abs(last_loss - val_loss) < min_change:
             num_of_succ = num_of_succ + 1
@@ -81,12 +86,13 @@ def write_experiment(text_file, exp_num, k, learning_rate, bridge, mean_epochs, 
     text_file.write(result_str)
 
 def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge, learning_rate):
-    amount_input_neurons, amount_output_neurons, rand_seed = (len(train_data), 1, 350)
-
+    amount_input_neurons, amount_output_neurons, rand_seed = (len(train_data[0]), 1, 350)
+    print(f"amount_input_neurons = {amount_input_neurons}, amount_output_neurons = {amount_output_neurons}")
     # define placeholder that will be used later after tensorflow session starts
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
+    print("here0")
     y = tf.compat.v1.placeholder(tf.float32, [None, amount_output_neurons])
-
+    print("here1")
     w1 = tf.Variable(tf.random.uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
                                        dtype=tf.dtypes.float32, name=None)
     if bridge == True:
@@ -94,27 +100,36 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
     else:
         w2_num_of_rows = k
     w2 = tf.Variable(tf.random.uniform([w2_num_of_rows, 1], minval=-1, maxval=1, seed=rand_seed),dtype=tf.dtypes.float32,  name=None)
+    print("here3")
     b1 = tf.compat.v1.Variable(tf.random.uniform([1, k], minval=-1, maxval=1, seed=rand_seed), dtype=tf.dtypes.float32, name=None)
+    print("here4")
     b2 = tf.compat.v1.Variable(tf.random.uniform([1, 1], minval=-1, maxval=1, seed=rand_seed), dtype=tf.dtypes.float32, name=None)
+    print("here5")
 
     sess = tf.compat.v1.Session()
     init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
     output = get_output(x, w1, w2, bridge, b1, b2)
+    print("here6")
     loss = - tf.reduce_sum(((-1) * y * tf.math.log(output)) + (1 - y) * tf.math.log(1.0 - output))
     train_grad = tf.compat.v1.train.GradientDescentOptimizer(learning_rate).minimize(loss)
+    print("here7")
 
     success, steps, val_loss = \
         perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res);
+    print("here8")
 
     result_to_return, success = \
         sess.run([b1, b2, loss, w1, w2], {x: val_data, y: expected_data_validation_results})
+    print("here9")
     train_loss = sess.run(loss, {x: train_data, y: expected_train_res})
+    print("here10")
     (new_b1, new_b2, new_loss, new_w1, new_w2, steps, val_loss, train_loss) = \
     (result_to_return[0], result_to_return[1], result_to_return[2], result_to_return[3], result_to_return[4], \
      result_to_return[5], result_to_return[6], result_to_return[7])
 
     train = sess.run(loss, {x: train_data, y: expected_train_res})
+    print("here11")
     result_to_return = [new_b1, new_b2, new_loss, new_w1, new_w2, steps, val_loss, train_loss]
     return result_to_return, success
 
