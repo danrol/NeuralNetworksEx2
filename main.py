@@ -15,20 +15,22 @@ import matplotlib.pyplot as plt
 max_num_of_steps = 40000
 num_succ_runs = 10
 temperature = 0.001
-#learning_rate = 0.01
 min_val_loss = 0.3
 huge_num = 1000000
 min_change = 0.01
 
 def get_output(x, w1, w2, bridge, b1, b2):
-    z1 = tf.matmul(x, w1) + b1
-    hidden_layer_res = tf.sigmoid(z1 / temperature)
+    print(f"x shape = {tf.shape(x)}, w1 shape = {tf.shape(w1)}")
+    z1 = tf.add(tf.matmul(x, w1),b1)
+    print("after got z1")
+    temp = tf.sigmoid(z1 / temperature)
     if bridge:
-        conc_hidden_layer_res = tf.concat([hidden_layer_res, x], 1)
+        hidden_layer_res = tf.concat([temp, x], 1)
     else:
-        conc_hidden_layer_res = tf.concat([hidden_layer_res, x], 1)
-
-    z2 = tf.matmul(conc_hidden_layer_res, w2) + b2
+        hidden_layer_res = temp
+    print(f"hidden layer res shape = {tf.shape(hidden_layer_res)}, w2 shape = {tf.shape(w2)}")
+    z2 = tf.add(tf.matmul(hidden_layer_res, w2), b2)
+    print("after got z2")
 
     output = tf.sigmoid(z2 / temperature)
     return output
@@ -79,7 +81,7 @@ def write_experiment(text_file, exp_num, k, learning_rate, bridge, mean_epochs, 
     text_file.write(result_str)
 
 def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge, learning_rate):
-    amount_input_neurons, amount_output_neurons, rand_seed = (2, 1, 350)
+    amount_input_neurons, amount_output_neurons, rand_seed = (len(train_data), 1, 350)
 
     # define placeholder that will be used later after tensorflow session starts
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
@@ -87,7 +89,11 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
 
     w1 = tf.Variable(tf.random.uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
                                        dtype=tf.dtypes.float32, name=None)
-    w2 = tf.Variable(tf.random.uniform([k, 1], minval=-1, maxval=1, seed=rand_seed),dtype=tf.dtypes.float32,  name=None)
+    if bridge == True:
+        w2_num_of_rows = k + amount_input_neurons
+    else:
+        w2_num_of_rows = k
+    w2 = tf.Variable(tf.random.uniform([w2_num_of_rows, 1], minval=-1, maxval=1, seed=rand_seed),dtype=tf.dtypes.float32,  name=None)
     b1 = tf.compat.v1.Variable(tf.random.uniform([1, k], minval=-1, maxval=1, seed=rand_seed), dtype=tf.dtypes.float32, name=None)
     b2 = tf.compat.v1.Variable(tf.random.uniform([1, 1], minval=-1, maxval=1, seed=rand_seed), dtype=tf.dtypes.float32, name=None)
 
@@ -95,8 +101,8 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
     init = tf.compat.v1.global_variables_initializer()
     sess.run(init)
     output = get_output(x, w1, w2, bridge, b1, b2)
-    loss = - tf.reduce_sum((y * tf.log(output)) + (1 - y) * tf.log(1.0 - output))
-    train_grad = tf.train.GradientDescentOptimizer(learning_rate).minimize(loss)
+    loss = - tf.reduce_sum(((-1) * y * tf.math.log(output)) + (1 - y) * tf.math.log(1.0 - output))
+    train_grad = tf.compat.v1.train.GradientDescentOptimizer(learning_rate).minimize(loss)
 
     success, steps, val_loss = \
         perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res);
@@ -128,17 +134,17 @@ def print_inputs(input_data_x, expected_input_results, data_validation_input, ex
         print(f"[{exp_val_res[0]}]")
 
 if __name__ == '__main__':
-    input_data_x = np.array([[ 0, 0],
-                             [ 0, 1],
-                             [1, 0],
-                             [ 1, 1]])
+    input_data_x = [[0, 0],
+                    [0, 1],
+                    [1, 0],
+                    [1, 1]]
     # expected results from activating XOR (corresponds to the lists in input_train list)
-    expected_input_results = np.array([[0], [1], [1], [0]])
-    data_validation_input = np.array([[1, 0.1],
-                                [1, 0.9],
-                                [0.9, 0.9],
-                                [0.1, 0.9]])
-    expected_data_validation_results = np.array([[1], [0], [0], [1]])
+    expected_input_results = [[0], [1], [1], [0]]
+    data_validation_input = [[1, 0.1],
+                             [1, 0.9],
+                             [0.9, 0.9],
+                             [0.1, 0.9]]
+    expected_data_validation_results = [[1], [0], [0], [1]]
     print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results);
     # k = 4
     # xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge):
@@ -153,3 +159,5 @@ if __name__ == '__main__':
             for learning_rate in learning_rate_options:
                 run_experiment(text_file, exp_num, input_data_x, expected_input_results, data_validation_input,
                                expected_data_validation_results, k, bridge, learning_rate)
+
+    text_file.close()
