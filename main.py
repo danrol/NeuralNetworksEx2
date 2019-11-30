@@ -49,6 +49,13 @@ def perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, 
             else:
                 count = 0
 
+def print_experiment(exp_num, hidden_num, learning_rate, bridge, mean_epochs, std_epochs, fail_count, mean_val_loss,
+                     std_val_loss_percent, mean_train_loss, std_train_loss_percent):
+    print(f"experiment {exp_num}:hidden:{hidden_num}, LR:{learning_rate}, bridge:{bridge} ")
+    print(f"mean_epocs:{mean_epochs}, std/epocs% {std_epochs},failures = {fail_count}")
+    print(f"mean_valid_loss:{mean_val_loss}, stdvalidlossPercent: {std_val_loss_percent},")
+    print(f"meanTrainLoss: {mean_train_loss}, stdTrainLossPercent:{std_train_loss_percent}")
+
 def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge,  learn_rate):
     amount_input_neurons = 2
     amount_output_neurons = 1
@@ -57,7 +64,7 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
     # define placeholder that will be used later after tensorflow session starts
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
     y = tf.compat.v1.placeholder(tf.float32, [None, amount_output_neurons])
-    y = tf.compat.v1.placeholder(tf.float32, [None, 1])
+    #y = tf.compat.v1.placeholder(tf.float32, [None, 1])
 
     w1 = tf.Variable(tf.random.uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
                                        dtype=tf.dtypes.float32, name=None)
@@ -74,12 +81,19 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
 
     perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res);
 
-    final_output = []
-    #loss = []
-    #result = sess.run([final_output, loss], {x: data, y: expected_data})
+    new_b1, new_b2, new_loss, new_w1, new_w2 = sess.run([b1, b2, loss, w1, w2], {x: val_data, y})
+    train = sess.run(loss, {x: train_data, y: expected_train_res})
 
-    #squared = tf.square(final_output - y)
-    #mse_loss = tf.reduce_sum(squared)
+
+def print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results):
+    for input in input_data_x:
+        print(f"Input data x: [{input[0]}, {input[1]}], ")
+    for expected_output_res in expected_input_results:
+        print(f"Expected output: [{expected_output_res[0]}], ")
+    for val_input in data_validation_input:
+        print(f"data validation input: [{val_input[0]}, {val_input[1]}], ")
+    for exp_val_res in expected_data_validation_results:
+        print(f"expected data validation results: [{exp_val_res[0]}], ")
 
 if __name__ == '__main__':
     input_data_x = np.array([[ 0, 0],
@@ -93,5 +107,6 @@ if __name__ == '__main__':
                                 [0.9, 0.9],
                                 [0.1, 0.9]])
     expected_data_validation_results = np.array([[1], [0], [0], [1]])
+    print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results);
     k = 4
     xor_neural_network(input_data_x, expected_input_results,k , 0.09)
