@@ -13,12 +13,14 @@ import matplotlib.pyplot as plt
 
 max_num_of_steps = 40000
 num_max_succ_runs = 10
-temperature = 0.5
+temperature = 0.4
 min_val_loss = 0.2
 huge_num = 1000000
 min_change = 0.0001
 
 def get_output(x, w1, w2, bridge, b1, b2):
+    ##############################################################################
+    ### Get target output  ###
     #print(f"x shape = {tf.shape(x)}, w1 shape = {tf.shape(w1)}")
     z1 = tf.add(tf.matmul(x, w1),b1)
     #print("after got z1")
@@ -36,6 +38,8 @@ def get_output(x, w1, w2, bridge, b1, b2):
 
 
 def perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, val_data, exp_val_res):
+    ##############################################################################
+    ### Perform epoch steps  ###
     success, num_of_succ, last_loss = (False, 0, huge_num)
     for step in range(max_num_of_steps):
         # print(f"step = {step}")
@@ -56,9 +60,11 @@ def perform_steps(sess, train_grad, x, y, train_data, expected_train_res, loss, 
 
 
 def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge, learning_rate):
+    ##############################################################################
+    ### Perform xor neural network  ###
+
     amount_input_neurons, amount_output_neurons, rand_seed = (len(train_data[0]), 1, 350)
     # print(f"amount_input_neurons = {amount_input_neurons}, amount_output_neurons = {amount_output_neurons}")
-    # define placeholder that will be used later after tensorflow session starts
     x = tf.compat.v1.placeholder(tf.float32, [None, amount_input_neurons])
     y = tf.compat.v1.placeholder(tf.float32, [None, amount_output_neurons])
     w1 = tf.Variable(tf.random.uniform([amount_input_neurons, k], minval=-1, maxval=1, seed=0),
@@ -87,6 +93,8 @@ def xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k,
 
 def run_experiment(text_file, exp_num, train_data, expected_train_res, val_data, exp_val_res, k, bridge, learning_rate):
     steps, succ_count, fail_count, all_val_losses, all_train_losses = ([], 0, 0, [], [])
+    ##############################################################################
+    ### Run all predefined experiments  ###
     while succ_count < num_max_succ_runs:
         b1, b2,  w1, w2, loss, val_loss,  train_loss, success, step = xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge, learning_rate)
         if success == True:
@@ -110,6 +118,8 @@ def run_experiment(text_file, exp_num, train_data, expected_train_res, val_data,
 
 def write_experiment(text_file, exp_num, k, learning_rate, bridge, mean_epochs, std_epochs, fail_count,
                      mean_val_loss, std_val_loss_percent, mean_train_loss, std_train_loss_percent):
+    ##############################################################################
+    ### Write experiment result to the console and to the text file  ###
     print("writing")
     result_str = f'experiment{exp_num}:hidden:{k}, LR:{learning_rate}, bridge:{bridge}\n' \
                  f'mean_epocs:{mean_epochs}, std/epocsPerc {std_epochs},Failures = {fail_count}\n' \
@@ -124,6 +134,8 @@ def write_experiment(text_file, exp_num, k, learning_rate, bridge, mean_epochs, 
 
 
 def print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results):
+    ##############################################################################
+    ### Print all given inputs  ###
     print("Input data x:")
     for input in input_data_x:
         print(f"[{input[0]}, {input[1]}]")
