@@ -1,0 +1,40 @@
+experiment1:hidden:2, LR:0.1, bridge:True
+mean_epocs:977.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.05392693355679512, stdvalidlossPercent: 7.450580596923828e-09,
+meanTrainLoss: 0.05392693355679512, stdTrainLossPercent:0.0
+
+experiment2:hidden:2, LR:0.01, bridge:True
+mean_epocs:4745.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.13470672070980072, stdvalidlossPercent: 1.4901161193847656e-08,
+meanTrainLoss: 0.13470672070980072, stdTrainLossPercent:0.0
+
+experiment3:hidden:4, LR:0.1, bridge:True
+mean_epocs:1192.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.02910277247428894, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.02910277247428894, stdTrainLossPercent:0.0
+
+experiment4:hidden:4, LR:0.01, bridge:True
+mean_epocs:7221.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.05695812776684761, stdvalidlossPercent: 1.4901161193847656e-08,
+meanTrainLoss: 0.05695812776684761, stdTrainLossPercent:0.0
+
+experiment5:hidden:2, LR:0.1, bridge:False
+mean_epocs:947.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.05582459643483162, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.05582459643483162, stdTrainLossPercent:0.0
+
+experiment6:hidden:2, LR:0.01, bridge:False
+mean_epocs:4504.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.1447896659374237, stdvalidlossPercent: 1.4901161193847656e-08,
+meanTrainLoss: 0.1447896659374237, stdTrainLossPercent:0.0
+
+experiment7:hidden:4, LR:0.1, bridge:False
+mean_epocs:846.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.02446918562054634, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.02446918562054634, stdTrainLossPercent:0.0
+
+experiment8:hidden:4, LR:0.01, bridge:False
+mean_epocs:3940.0, std/epocsPerc 0.0,Failures = 0
+mean_valid_loss:0.08855480700731277, stdvalidlossPercent: 1.4901161193847656e-08,
+meanTrainLoss: 0.08855480700731277, stdTrainLossPercent:0.0
+
