@@ -149,6 +149,7 @@ def print_inputs(input_data_x, expected_input_results, data_validation_input, ex
     for exp_val_res in expected_data_validation_results:
         print(f"[{exp_val_res[0]}]")
 
+
 if __name__ == '__main__':
     input_data_x = [[0, 0],
                     [0, 1],
@@ -162,8 +163,6 @@ if __name__ == '__main__':
                              [0.1, 0.9]]
     expected_data_validation_results = [[1], [0], [0], [1]]
     print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results);
-    # k = 4
-    # xor_neural_network(train_data, expected_train_res, val_data, exp_val_res, k, bridge):
     bridge_options = [True, False]
     k_options = [2, 4]
     learning_rate_options = [0.1, 0.01]
