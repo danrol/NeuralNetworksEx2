@@ -5,7 +5,6 @@
 #0 0 --> 0
 #Daniil Rolnik
 #334018009
-#k - amount of hidden neurons in hidden layer
 import random
 import numpy as np
 import tensorflow as tf
