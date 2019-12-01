@@ -151,6 +151,8 @@ def print_inputs(input_data_x, expected_input_results, data_validation_input, ex
 
 
 if __name__ == '__main__':
+    ### Training Examples
+    ### All combinations of XOR
     input_data_x = [[0, 0],
                     [0, 1],
                     [1, 0],
