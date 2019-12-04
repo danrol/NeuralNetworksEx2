@@ -1,27 +1,27 @@
 experiment1:hidden:2, LR:0.1, bridge:True
 mean_epocs:748.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.0425664521753788, stdvalidlossPercent: 0.0,
+mean_valid_loss:0.0425664521753788, stdvalidlossPercent: 7.450580596923828e-09,
 meanTrainLoss: 0.0425664521753788, stdTrainLossPercent:0.0
 
 experiment2:hidden:2, LR:0.01, bridge:True
 mean_epocs:2880.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.1343017816543579, stdvalidlossPercent: 0.0,
+mean_valid_loss:0.1343017816543579, stdvalidlossPercent: 1.4901161193847656e-08,
 meanTrainLoss: 0.1343017816543579, stdTrainLossPercent:0.0
 
 experiment3:hidden:4, LR:0.1, bridge:True
 mean_epocs:951.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.021625690162181854, stdvalidlossPercent: 0.0,
-meanTrainLoss: 0.021625690162181854, stdTrainLossPercent:0.0
+mean_valid_loss:0.021625692024827003, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.021625692024827003, stdTrainLossPercent:0.0
 
 experiment4:hidden:4, LR:0.01, bridge:True
 mean_epocs:4484.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.05710413306951523, stdvalidlossPercent: 0.0,
-meanTrainLoss: 0.05710413306951523, stdTrainLossPercent:0.0
+mean_valid_loss:0.05710412934422493, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.05710412934422493, stdTrainLossPercent:0.0
 
 experiment5:hidden:2, LR:0.1, bridge:False
 mean_epocs:726.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.044135767966508865, stdvalidlossPercent: 0.0,
-meanTrainLoss: 0.044135767966508865, stdTrainLossPercent:0.0
+mean_valid_loss:0.044135771691799164, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.044135771691799164, stdTrainLossPercent:0.0
 
 experiment6:hidden:2, LR:0.01, bridge:False
 mean_epocs:2736.0, std/epocsPerc 0.0,Failures = 0
@@ -30,11 +30,11 @@ meanTrainLoss: 0.1450807899236679, stdTrainLossPercent:0.0
 
 experiment7:hidden:4, LR:0.1, bridge:False
 mean_epocs:662.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.020351402461528778, stdvalidlossPercent: 0.0,
-meanTrainLoss: 0.020351402461528778, stdTrainLossPercent:0.0
+mean_valid_loss:0.020351404324173927, stdvalidlossPercent: 0.0,
+meanTrainLoss: 0.020351404324173927, stdTrainLossPercent:0.0
 
 experiment8:hidden:4, LR:0.01, bridge:False
 mean_epocs:2782.0, std/epocsPerc 0.0,Failures = 0
-mean_valid_loss:0.08307047188282013, stdvalidlossPercent: 0.0,
+mean_valid_loss:0.08307047188282013, stdvalidlossPercent: 1.4901161193847656e-08,
 meanTrainLoss: 0.08307047188282013, stdTrainLossPercent:0.0
 

@@ -152,17 +152,17 @@ def print_inputs(input_data_x, expected_input_results, data_validation_input, ex
 if __name__ == '__main__':
     ### Training Examples
     ### All combinations of XOR
-    input_data_x = [[0, 0],
+    input_data_x = np.array([[0, 0],
                     [0, 1],
                     [1, 0],
-                    [1, 1]]
+                    [1, 1]])
     # expected results from activating XOR (corresponds to the lists in input_train list)
-    expected_input_results = [[0], [1], [1], [0]]
-    data_validation_input = [[1, 0.1],
+    expected_input_results = np.array([[0], [1], [1], [0]])
+    data_validation_input = np.array([[1, 0.1],
                              [1, 0.9],
                              [0.9, 0.9],
-                             [0.1, 0.9]]
-    expected_data_validation_results = [[1], [0], [0], [1]]
+                             [0.1, 0.9]])
+    expected_data_validation_results = np.array([[1], [0], [0], [1]])
     print_inputs(input_data_x, expected_input_results, data_validation_input, expected_data_validation_results);
     bridge_options = [True, False]
     k_options = [2, 4]
